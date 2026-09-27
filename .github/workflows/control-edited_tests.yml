@@ -26,7 +26,8 @@ jobs:
 
       - name: Run tests
         run: |
-          pytest
+#          pytest .github/workflows/file_test.py
+          pytest tests/
 
       - name: Run flake8
         uses: py-actions/flake8@v2
