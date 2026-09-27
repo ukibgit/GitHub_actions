@@ -22,7 +22,8 @@ jobs:
         run: pytest
 
       - name: Run flake8
-        run: flake8 .
+        run: |
+          flake8
       - name: Run tests
         run: |
 #          pytest .github/workflows/file_test.py
