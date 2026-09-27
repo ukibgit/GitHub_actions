@@ -10,10 +10,9 @@ steps:
 
   - name: Set up Python
     uses: actions/setup-python@v5
-    with:
-#      python-version: "3.x"
-- name: Install pytest and flake8
-  run: |
+    with: python-version: "3.x"
+ - name: Install pytest and flake8
+   run: |
     pip install pytest
     pip install flake8
 
