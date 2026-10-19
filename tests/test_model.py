@@ -44,10 +44,18 @@ def test_prediction_output_schema(valid_sample_input: pd.DataFrame):
     probabilities = inference_model.predict_proba(valid_sample_input)[0]
 
     # Assert model output structure
-    assert isinstance(prediction, (int, np.integer)), "Prediction target must be an integer"
-    assert prediction in, "Prediction output must match binary classification boundaries (0 or 1)"
-    assert len(probabilities) == 2, "Probabilities array must yield exactly two binary classes"
-    assert np.isclose(sum(probabilities), 1.0), "Class probabilities must sum precisely to 1.0"
+    assert isinstance(prediction, (int, np.integer)), {
+        "Prediction target must be an integer"
+    }
+    assert prediction in (0, 1), {
+        "Prediction output must match binary classification boundaries (0 or 1)"
+    }
+    assert len(probabilities) == 2, {
+        "Probabilities array must yield exactly two binary classes"
+    }
+    assert np.isclose(sum(probabilities), 1.0), {
+        "Class probabilities must sum precisely to 1.0"
+    }
 
 
 def test_inference_latency_sla(valid_sample_input: pd.DataFrame):
@@ -61,7 +69,9 @@ def test_inference_latency_sla(valid_sample_input: pd.DataFrame):
     _ = inference_model.predict(valid_sample_input)
     elapsed_time = time.perf_counter() - start_time
     
-    assert elapsed_time < SLA_LIMIT_SECONDS, f"Model SLA violated! Latency was {elapsed_time*1000:.2f}ms"
+    assert elapsed_time < SLA_LIMIT_SECONDS, {
+        f"Model SLA violated! Latency was {elapsed_time*1000:.2f}ms"
+    }
 
 
 def test_null_value_resilience(corrupt_sample_input: pd.DataFrame):
@@ -86,4 +96,6 @@ def test_boundary_conditions(valid_sample_input: pd.DataFrame, extreme_amount: f
     
     # We expect high transaction amounts to accurately trigger a fraud flag (1)
     prediction = inference_model.predict(valid_sample_input)[0]
-    assert prediction == 1, f"Extreme transaction amount of {extreme_amount} failed to trigger a fraud flag."
+    assert prediction == 1, {
+        f"Extreme transaction amount of {extreme_amount} failed to trigger a fraud flag."
+    }
