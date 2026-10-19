@@ -75,13 +75,14 @@ def test_inference_latency_sla(valid_sample_input: pd.DataFrame):
 
 
 def test_null_value_resilience(corrupt_sample_input: pd.DataFrame):
-    """Ensures the pipeline's internal imputation safely handles missing values
-
+    """Ensures the pipeline's internal imputation safely handles missing values 
     without crashing the production server.
     """
     try:
         prediction = inference_model.predict(corrupt_sample_input)[0]
-        assert prediction in, "Model failed to output a standard binary class after imputation"
+        assert prediction in (0, 1), {
+            "Model failed to output a standard binary class after imputation"
+        }
     except Exception as exc:
         pytest.fail(f"Pipeline crashed on missing data! Exception raised: {exc}")
 
