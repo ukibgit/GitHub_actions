@@ -89,13 +89,15 @@ def test_null_value_resilience(corrupt_sample_input: pd.DataFrame):
 @pytest.mark.parametrize("extreme_amount", [1000000.00, 9999999.99])
 def test_boundary_conditions(valid_sample_input: pd.DataFrame, extreme_amount: float):
     """Uses test parameterization to pass massive outlier values into the model.
-
     Verifies the model handles extreme inputs gracefully.
     """
     valid_sample_input["transaction_amount"] = extreme_amount
-    
+
+    # Ensure you are fetching the scalar value out of the array/series output
     # We expect high transaction amounts to accurately trigger a fraud flag (1)
     prediction = inference_model.predict(valid_sample_input)[0]
+
+    # # CLEANED ASSERTION: Single condition followed by a clean string message
     assert prediction == 1, {
         f"Extreme transaction amount of {extreme_amount} failed to trigger a fraud flag."
     }
