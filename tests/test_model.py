@@ -75,23 +75,17 @@ def test_inference_latency_sla(valid_sample_input: pd.DataFrame):
 
 
 def test_null_value_resilience(corrupt_sample_input: pd.DataFrame):
-    """Ensures the pipeline's internal imputation safely handles missing values 
-    without crashing the production server.
-    """
+    """Ensures the pipeline's internal imputation safely handles missing values without crashing the production server. """
     try:
         prediction = inference_model.predict(corrupt_sample_input)[0]
-        assert prediction in (0, 1), {
-            "Model failed to output a standard binary class after imputation"
-        }
+        assert prediction in (0, 1), "Model failed to output a standard binary class after imputation"
     except Exception as exc:
         pytest.fail(f"Pipeline crashed on missing data! Exception raised: {exc}")
 
 
 @pytest.mark.parametrize("extreme_amount", [1000000.00, 9999999.99])
 def test_boundary_conditions(valid_sample_input: pd.DataFrame, extreme_amount: float):
-    """Uses test parameterization to pass massive outlier values into the model.
-    Verifies the model handles extreme inputs gracefully.
-    """
+    """Uses test parameterization to pass massive outlier values into the model. Verifies the model handles extreme inputs gracefully."""
     valid_sample_input["transaction_amount"] = extreme_amount
 
     # Ensure you are fetching the scalar value out of the array/series output
